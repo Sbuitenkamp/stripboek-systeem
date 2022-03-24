@@ -1,4 +1,4 @@
-﻿namespace Stripboek_Project.Pages.Auth;
+namespace Stripboek_Project.Pages.Auth;
 
 public class Comic
 {
@@ -45,6 +45,7 @@ public class Theme
     
     public List<Series> series { get; set; }
 }
+
 public class Collection 
 {
     public int isbn { get; set; }
