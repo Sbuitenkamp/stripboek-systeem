@@ -1,0 +1,139 @@
+@page
+@model Stripboek_Project.Pages.Auth.RegisterToevoegen
+@Html.AntiForgeryToken()
+
+@{
+    
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="post" asp-page-handler="AddComic">
+                    <input name="isbn" type="number" class="form-control" placeholder="ISBN">
+                    <select name="series_id" class="form-select" aria-label="Default select example">
+                        <option selected>Open this select menu</option>
+                        @foreach (var s in Model.series)
+                        {
+                            <option value="@s.id">@s.title</option>
+                        }
+                    </select>
+                    <input name="title" type="text" class="form-control" placeholder="Titel">
+                    <input name="image" type="text" class="form-control" placeholder="Foto">
+                    <input name="digital" type="checkbox" class="form-control" placeholder="Digitaal">
+                    <textarea name="description" class="form-control" placeholder="Beschrijving" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Isbn</th>
+                        <th scope="col">Series ID</th>
+                        <th scope="col">Titel</th>
+                        <th scope="col">Foto</th>
+                        <th scope="col">Digitaal</th>
+                        <th scope="col">Beschrijving</th>
+                        <th scope="col">Actie</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var c in Model.comics)
+                    {
+                        <tr>
+                            <td>@c.isbn</td>
+                            <td>@c.series_id</td>
+                            <td>@c.title</td>
+                            <td>@c.image</td>
+                            <td>@c.digital</td>
+                            <td>@c.description</td>
+                            <td>
+                                <form method="post" asp-page-handler="DeleteComic">
+                                    <input type="hidden" value="@c.isbn" name="idDelete"/>
+                                    <button type="submit" class="btn btn-danger">Verwijder</button>
+                                </form>
+                                <form>
+                                    <button type="button" data-id="@c.isbn" class="btn btn-primary editComic">Edit</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <form style="display: none" id="editComicConfirmForm">
+        <input id="isbnedit" type="number" class="form-control" placeholder="ISBN">
+        <select id="series_idedit" class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            @foreach (var s in Model.series)
+            {
+                <option value="@s.id">@s.title</option>
+            }
+        </select>
+        <input id="titleedit" type="text" class="form-control" placeholder="Titel">
+        <input id="imageedit" type="text" class="form-control" placeholder="Foto">
+        <input id="digitaledit" type="checkbox" class="form-control" placeholder="Digitaal">
+        <textarea id="descriptionedit" class="form-control" placeholder="Beschrijving" id="floatingTextarea2" style="height: 100px"></textarea>
+        <button type="button" class="btn btn-primary" id="editComicConfirm">Edit</button>
+    </form>
+</div>
+
+<script>
+$(document).ready(function (){
+    var currentid = 0;
+                     
+    $("#editComicConfirm").click(function (){
+        $.ajax({
+            type: 'POST',
+            url: '/Auth/RegisterToevoegen?handler=EditComic',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                isbn: currentid,
+                series_id: $("#series_idedit").val(),
+                title: $("#titleedit").val(),
+                image: $("#imageedit").val(),
+                digital: $("#digitaledit").val(),
+                description: $("#descriptionedit").val()
+            },
+            success: function (res) {
+                console.log(res);
+                $('#editComicConfirmForm')[0].reset();
+                location.reload();
+            },
+        })
+    })
+    $(".editComic").click(function (){
+        console.log($(this).attr("data-id"))
+        currentid = $(this).attr("data-id");
+        $.ajax({
+            type: 'GET',
+            url: '/Auth/RegisterToevoegen?handler=AllComic',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                isbn: $(this).attr("data-id")
+            },
+            success: function (res) {
+                console.log(res[0]);
+                $("#editComicConfirmForm").show();
+                $('#editComicConfirmForm')[0].reset();
+                
+                $("#isbnedit").val(res[0].isbn);
+                $("#titleedit").val(res[0].title);
+                $("#imageedit").val(res[0].image);
+                $("#digitaledit").val(res[0].digital);
+                $("#descriptionedit").val(res[0].description);
+            },
+        })
+    })
+});
+</script>
