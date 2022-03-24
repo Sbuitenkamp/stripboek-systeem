@@ -13,7 +13,8 @@ public class SearchResult : PageModel
     {
         var res = new SearchRepository();
         Results = res.GetSerie(Search);
-        return Page();
+        var t = new Auth();
+        return t.Check(HttpContext.Session.GetString("authed"));
     }
 
     public string GetThemeFromList(List<Theme> lst)
