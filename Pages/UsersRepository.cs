@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using MySql.Data.MySqlClient;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Stripboek_Project.Pages;
 
@@ -37,7 +38,7 @@ public class UsersRepository
         return;
     }
 
-    public bool Auth(string username, string password)
+    public List<authresult> Auth(string username, string password)
     {
         using var connection = Connect();
         var user = connection
@@ -48,11 +49,17 @@ public class UsersRepository
                 });
         if (user != null && BCrypt.Net.BCrypt.Verify(password, user.password))
         {
-            return true;
+            return new List<authresult>{new authresult { auth = true, userid = user.id}};
         }
         else
         {
-            return false;
+            return new List<authresult>{new authresult { auth = false}};
         }
     }
+}
+
+public class authresult
+{
+    public bool auth { get; set; }
+    public int userid { get; set; }
 }
