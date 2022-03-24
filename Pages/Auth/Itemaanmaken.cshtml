@@ -5,15 +5,161 @@
 
 }
 
+@Html.AntiForgeryToken()
+
 <!DOCTYPE html>
 
 <html>
 <head>
     <title></title>
+
 </head>
 <body>
-<div>
-    
-</div>
+    <div class="container border" style="padding:20px">
+        <form method="post">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="AuthorName"></label>
+                </div>
+                <div class="col-5">
+                    <input type="text" asp-for="AuthorName" class="form-control" />
+                </div>
+                <span class="text-danger" asp-validation-for="AuthorName"></span>
+            </div>
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Type"></label>
+                </div>
+                <div class="col-5">
+                    <input type="text" asp-for="Type" class="form-control" />
+                </div>
+                <span class="text-danger" asp-validation-for="Type"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-2">
+                    <input type="submit" class="btn btn-primary" value="AuthorSubmit" />
+                </div>
+                <div class="col-5">
+                    <label class="text-danger">@Model.Msg</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="container border" style="padding:20px">
+        <h4>Authors</h4>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+                <table cellpadding="10" cellspacing="10">
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                    @foreach (var author in Model.Authors)
+                    {
+                        <tr>
+                            <td>@author.Name</td>
+                            <td>@author.type</td>
+                            <td>
+                                <form>
+                                    <button type="button" class="btn btn-primary Edit" data-id="@author.id">Edit</button>
+                                </form>
+                                <form method="post" asp-page-handler="Delete">
+                                    <input type="hidden" value="@author.id" name="id">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-md-6">
+                        <form id="EditFormConfirm" style="display:none">
+                            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <label asp-for="AuthorName"></label>
+                                </div>
+                                <div class="col-5">
+                                    <input id="NameEdit" type="text" asp-for="AuthorName" class="form-control"/>
+                                </div>
+                                <span class="text-danger" asp-validation-for="AuthorName"></span>
+                            </div>
+                            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <label asp-for="Type"></label>
+                                </div>
+                                <div class="col-5">
+                                    <input id="TypeEdit" type="text" asp-for="Type" class="form-control"/>
+                                </div>
+                                <span class="text-danger" asp-validation-for="Type"></span>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <button type="button" id="EditAuthor" class="btn btn-primary">Edit</button>
+                                </div>
+                                <div class="col-5">
+                                    <label class="text-danger">@Model.Msg</label>
+                                </div>
+                            </div>
+                        </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+<script>
+    $(document).ready(function(){
+        var currentId = 0;
+
+        $(".Edit").click(function(){
+            currentId = $(this).attr("data-id")
+
+            $.ajax({
+                type: 'GET',
+                url: '/Auth/Itemaanmaken?handler=Edit',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    id: $(this).attr("data-id")
+                },
+                success: function (res) {
+                    console.log(res[0].name);
+                    $("#EditFormConfirm").show();
+                    $("#NameEdit").val("");
+                    $("#TypeEdit").val("");
+                    $("#NameEdit").val(res[0].name);
+                    $("#TypeEdit").val(res[0].type);
+                },
+           })
+        })
+        $("#EditAuthor").click(function(){
+            $.ajax({
+                type: 'POST',
+                url: '/Auth/Itemaanmaken?handler=EditAuthor',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    id: currentId,
+                    name: $("#NameEdit").val(),
+                    type: $("#TypeEdit").val()
+                },
+                success: function (res) {
+                    $("#EditFormConfirm").hide();
+                    $("#NameEdit").val("");
+                    $("#TypeEdit").val("");
+                    location.reload()
+                },
+           })
+        })
+    });
+</script>

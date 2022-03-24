@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@{ 
+    var x = Context.Session.GetInt32("authed");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -7,6 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/Stripboek_Project.styles.css" asp-append-version="true"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
@@ -23,13 +28,13 @@
                         <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Overzicht">Overzicht</a>
+                        <a class="nav-link text-dark" asp-area="" asp-route-id="@x" asp-page="/Auth/Overzicht">Overzicht</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Itemaanmaken">Item Aanmaken</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Authz/Gebruikersbeheren">Gebruikers beheren</a>
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Gebruikersbeheren">Gebruikers beheren</a>
                     </li>
                 </ul>
             </div>

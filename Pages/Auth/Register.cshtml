@@ -1,0 +1,26 @@
+﻿@page
+@model Stripboek_Project.Pages.Auth.Register
+
+@{
+
+}
+
+<h1>Register</h1>
+
+<table class="table">
+    <tr>
+        <th>Titel</th>
+        <th>Serie</th>
+    </tr>
+    @foreach (var c in Model.comic)
+    {
+        <tr>
+            <td>@c.title</td>
+            @foreach (var t in @c.series)
+            {
+                <td>@t.title</td>
+            }
+        </tr>
+    }
+
+</table>
