@@ -1,4 +1,6 @@
-﻿namespace Stripboek_Project.Pages;
+﻿using Stripboek_Project.Pages.Auth;
+
+namespace Stripboek_Project.Pages;
 
 public class User
 {

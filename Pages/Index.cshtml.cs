@@ -33,9 +33,10 @@ public class IndexModel : PageModel
         var user = new UsersRepository();
         if (ModelState.IsValid)
         {
-            if (user.Auth(username, password))
+            var res = user.Auth(username, password).ToList();
+            if (res[0].auth)
             {
-                HttpContext.Session.SetString("authed", "set");
+                HttpContext.Session.SetInt32("authed", res[0].userid);
                 return new JsonResult(new {page = "/Auth/Index"});
             }
             else

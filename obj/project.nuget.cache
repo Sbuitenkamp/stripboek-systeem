@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "f0rC3XMuR2zbJnZPMezNQLx9YFqQADM272YTeTr0n2k2rkJzNtbL2p53vrQnr8JWFMtqgE620ntIjZ9guslNNA==",
+  "dgSpecHash": "2YqbbLDb9bhPHLBEik60T1Z2WfJ+UUBnoV6EWMVWpU5ihZlpw3e8LKO1LwkMJ1GLbKrjQ6NLwm2GvpuBTMT3ng==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jnkok\\RiderProjects\\Stripboek Project\\Stripboek Project\\Stripboek Project.csproj",
+  "projectFilePath": "J:\\stripboek-systeem\\Stripboek Project.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jnkok\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\jnkok\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",

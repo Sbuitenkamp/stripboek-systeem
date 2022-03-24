@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@{ 
+    var x = Context.Session.GetInt32("authed");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -23,13 +27,13 @@
                         <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Overzicht">Overzicht</a>
+                        <a class="nav-link text-dark" asp-area="" asp-route-id="@x" asp-page="/Auth/Overzicht">Overzicht</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Itemaanmaken">Item Aanmaken</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Authz/Gebruikersbeheren">Gebruikers beheren</a>
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Auth/Gebruikersbeheren">Gebruikers beheren</a>
                     </li>
                 </ul>
             </div>
