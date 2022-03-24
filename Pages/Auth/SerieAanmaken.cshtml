@@ -1,0 +1,118 @@
+@page
+@model Stripboek_Project.Pages.Auth.SerieAanmaken
+
+@{
+
+}
+
+@Html.AntiForgeryToken()
+<h1>Serie aanmaken</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="POST" asp-page-handler="SerieAanmaken">
+                    <input type="text" name="serietitle" class="form-control" placeholder="Naam">
+                    <input type="date" name="seriedate" class="form-control">
+                    <textarea class="form-control" name="seriebeschrijving" placeholder="Beschrijving..." id="floatingTextarea2" style="height: 100px"></textarea>
+                    <input text="number" name="serienummer" class="form-control" placeholder="Aantal in de serie"/>
+                    <button type="submit" class="btn btn-primary">Aanmaken</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <table class="table col-md-6">
+                    <tr>
+                        <th>Titel</th>
+                        <th>Jaar</th>
+                        <th>Beschrijving</th>
+                        <th>Aantal in serie</th>
+                    </tr>
+                    
+                    @foreach (var s in Model.series)
+                    {
+                        <tr>
+                            <td>@s.title</td>
+                            <td>@s.year</td>
+                            <td>@s.description</td>
+                            <td>@s.completeAmount</td>
+                            <td>
+                                <div class="d-flex">
+                                    <form method="POST" class="ml-2" asp-page-handler="DeleteSerie">
+                                        <input type="hidden" name="serieIdDelete" value="@s.id">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    <form>
+                                        <button type="button" data-id="@s.id" class="btn btn-primary editserie">Edit</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+    <form id="editserieconfirmform" style="display: none">
+        <input type="text" id="serietitleedit" class="form-control" placeholder="Naam">
+        <input type="date" id="seriedateedit" class="form-control">
+        <textarea class="form-control" id="seriebeschrijvingedit" placeholder="Beschrijving..." id="floatingTextarea2" style="height: 100px"></textarea>
+        <input text="number" id="serienummeredit" class="form-control" placeholder="Aantal in de serie"/>
+        <button type="button" id="editserieconfirm" class="btn btn-primary">Bewerk</button>
+    </form>
+</div>
+<script>
+$(document).ready(function (){
+    var currentid = 0;
+    
+    $("#editserieconfirm").click(function() {
+        
+        $.ajax({
+            type: 'POST',
+            url: '/auth/SerieAanmaken?handler=EditSerie',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                id: currentid,
+                title: $("#serietitleedit").val(),
+                year: $("#seriedateedit").val(),
+                description: $("#seriebeschrijvingedit").val(),
+                completeAmount: $("#serienummeredit").val()
+            },
+            success: function (res) {
+                console.log(res);
+                $('#editserieconfirmform')[0].reset();
+                location.reload();
+            },
+        })
+    })
+    
+    $(".editserie").click(function (){
+        currentid = $(this).attr("data-id");
+        $.ajax({
+            type: 'GET',
+            url: '/Auth/Serieaanmaken?handler=AlleSeries',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                id: $(this).attr("data-id")
+            },
+            success: function (res) {
+                console.log(res);
+                $('#editserieconfirmform').show();
+                $('#editserieconfirmform')[0].reset();  
+                
+                $("#serietitleedit").val(res[0].title);
+                $("#seriedateedit").val(res[0].year);
+                $("#seriebeschrijvingedit").val(res[0].description);
+                $("#serienummeredit").val(res[0].completeAmount);
+            },
+        })
+    });
+});
+</script>
