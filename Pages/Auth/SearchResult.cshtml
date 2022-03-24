@@ -1,0 +1,36 @@
+@page "{Search?}"
+@model Stripboek_Project.Pages.Auth.SearchResult
+
+@{
+    
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Titel</th>
+        <th scope="col">ISBN</th>
+        <th scope="col">Auteur</th>
+        <th scope="col">Serie</th>
+        <th scope="col">Thema</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model.Results)
+    {
+
+        <tr>
+            <td>@c.comics.title</td>
+            <td>@c.comics.isbn</td>
+            <td>
+                @Model.GetAuthorFromList(c.authors)
+            </td>
+            <td>@c.title</td>
+            <td>
+                @Model.GetThemeFromList(c.themes)
+            </td>
+            <td>@c.comics.image</td>
+        </tr>
+    }
+    </tbody>
+</table>
