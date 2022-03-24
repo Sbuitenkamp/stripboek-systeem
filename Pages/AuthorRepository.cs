@@ -1,5 +1,5 @@
 ﻿using System.Data;
-    using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using Dapper;
 
 namespace Stripboek_Project.Pages

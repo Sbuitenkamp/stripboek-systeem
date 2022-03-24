@@ -12,7 +12,7 @@ public class Itemaanmaken : PageModel
 
     public string Msg { get; set; } = string.Empty;
 
-    public List<Author> Authors { get; set; } = new List<Author>();
+    public List<Stripboek_Project.Pages.Author> Authors { get; set; } = new List<Stripboek_Project.Pages.Author>();
 
     public IActionResult OnGet()
     {
