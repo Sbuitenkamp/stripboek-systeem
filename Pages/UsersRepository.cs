@@ -1,26 +1,14 @@
-﻿using System.Data;
-using MySql.Data.MySqlClient;
-using Dapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
 
 namespace Stripboek_Project.Pages;
 
-public class UsersRepository
+public class UsersRepository: Repository
 {
-    private IDbConnection Connect()
-    {
-        return new MySqlConnection(
-            "Server=127.0.0.1;Port=3306;" +
-            "Database=comics;" +
-            "Uid=root;Pwd=;"
-        );
-    }
-    
     public List<User> Get()
     {
         using var connection = Connect();
         var users = connection
-            .Query<User>("SELECT * FROM user");
+            .Query<User>("SELECT * FROM User");
         return users.ToList();
     }
 
@@ -28,7 +16,7 @@ public class UsersRepository
     {
         using var connection = Connect();
         var users = connection
-            .Query("INSERT INTO user (username, password, role_code) VALUES (@username,@password, @role_code)",
+            .Query("INSERT INTO User (username, password, role_code) VALUES (@username,@password, @role_code)",
                 new
                 {
                     username = username,
@@ -42,7 +30,7 @@ public class UsersRepository
     {
         using var connection = Connect();
         var user = connection
-            .QuerySingleOrDefault("SELECT * FROM user WHERE username = @username",
+            .QuerySingleOrDefault("SELECT * FROM User WHERE username = @username",
                 new
                 {
                     username = username

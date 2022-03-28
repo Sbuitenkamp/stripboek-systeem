@@ -1,25 +1,14 @@
-﻿using System.Data;
-using MySql.Data.MySqlClient;
-using Dapper;
+﻿using Dapper;
 
 namespace Stripboek_Project.Pages
 {
-    public class AuthorRepository
+    public class AuthorRepository: Repository
     {
-        private IDbConnection Connect()
-        {
-            return new MySqlConnection(
-                "Server=127.0.0.1;Port=3306;" +
-                "Database=comics;" +
-                "Uid=root;Pwd=;"
-            );
-        }
-
         public List<Author> Get()
         {
             using var connection = Connect();
             var authors = connection
-                .Query<Author>("SELECT * FROM author");
+                .Query<Author>("SELECT * FROM Author");
             return authors.ToList();
         }
 
@@ -27,7 +16,7 @@ namespace Stripboek_Project.Pages
         {
             using var connection = Connect();
             var authors = connection
-                .Query<Author>("SELECT * FROM author WHERE id = @id", new {id=id});
+                .Query<Author>("SELECT * FROM Author WHERE id = @id", new {id=id});
             return authors.ToList();
         }
 
@@ -35,7 +24,7 @@ namespace Stripboek_Project.Pages
         {
             using var connection = Connect();
             var users = connection
-                .Query($"INSERT INTO author (name, type) VALUES (@name,@type)",
+                .Query($"INSERT INTO Author (name, type) VALUES (@name,@type)",
                     new
                     {
                         name = AuthorName,
@@ -48,7 +37,7 @@ namespace Stripboek_Project.Pages
         {
             var connection = Connect();
 
-            connection.Query("UPDATE author SET name=@name, type=@type WHERE id = @id", new {name = name, type=type, id=id});
+            connection.Query("UPDATE Author SET name=@name, type=@type WHERE id = @id", new {name = name, type=type, id=id});
             return;
         }
 
@@ -56,7 +45,7 @@ namespace Stripboek_Project.Pages
         {
             using var connection = Connect();
             var authors = connection
-                .Query<Author>("DELETE FROM author WHERE id = @id", new {id = id});
+                .Query<Author>("DELETE FROM Author WHERE id = @id", new {id = id});
         }
     }
 }

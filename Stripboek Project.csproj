@@ -13,4 +13,9 @@
       <PackageReference Include="MySql.Data" Version="8.0.28" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\img\register" />
+      <Folder Include="wwwroot\img\users" />
+    </ItemGroup>
+
 </Project>
