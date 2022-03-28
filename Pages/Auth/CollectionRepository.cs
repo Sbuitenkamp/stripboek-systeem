@@ -1,31 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Dapper;
-using MySql.Data.MySqlClient;
+﻿using Dapper;
 
 namespace Stripboek_Project.Pages.Auth;
 
-public class CollectionRepository
+public class CollectionRepository: Repository
 {
-    private IDbConnection Connect()
-    {
-        return new MySqlConnection(
-            "Server=127.0.0.1;Port=3306;" +
-            "Database=comics;" +
-            "Uid=root;Pwd=;"
-        );
-    }
-    
     public List<Collection> Get(int id)
     {
         using var connection = Connect();
         var collections = connection
-            .Query<Collection, Comic, User, Series, Collection>("SELECT * FROM collectioncomic "+
-            "INNER JOIN comic ON collectioncomic.isbn = comic.isbn "+
-            "INNER JOIN user ON collectioncomic.user_id = user.id "+
-            "INNER JOIN series ON comic.series_id = series.id "+
-            "WHERE collectioncomic.user_id = @id",
+            .Query<Collection, Comic, User, Series, Collection>("SELECT * FROM collectionComic "+
+            "INNER JOIN Comic ON collectionComic.isbn = Comic.isbn "+
+            "INNER JOIN user ON collectionComic.user_id = user.id "+
+            "INNER JOIN series ON Comic.series_id = series.id "+
+            "WHERE collectionComic.user_id = @id",
                 (collection, comic, user, series) =>
                 {
                     collection.comics = new List<Comic>();

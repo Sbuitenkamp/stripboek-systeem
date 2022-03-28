@@ -10,7 +10,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <form method="post" asp-page-handler="AddComic">
+                <form method="post" asp-page-handler="AddComic" enctype="multipart/form-data">
                     <input name="isbn" type="number" class="form-control" placeholder="ISBN">
                     <select name="series_id" class="form-select" aria-label="Default select example">
                         <option selected>Open this select menu</option>
@@ -20,7 +20,7 @@
                         }
                     </select>
                     <input name="title" type="text" class="form-control" placeholder="Titel">
-                    <input name="image" type="text" class="form-control" placeholder="Foto">
+                    <input name="file" type="file" class="form-control" placeholder="Foto">
                     <input name="digital" type="checkbox" class="form-control" placeholder="Digitaal">
                     <textarea name="description" class="form-control" placeholder="Beschrijving" id="floatingTextarea2" style="height: 100px"></textarea>
                     <button type="submit" class="btn btn-primary">Add</button>
@@ -46,7 +46,7 @@
                             <td>@c.isbn</td>
                             <td>@c.series_id</td>
                             <td>@c.title</td>
-                            <td>@c.image</td>
+                            <td><img src="@c.image" alt="@c.image"></td>
                             <td>@c.digital</td>
                             <td>@c.description</td>
                             <td>
