@@ -1,33 +1,19 @@
-using System.Data;
 using Dapper;
-using MySql.Data.MySqlClient;
 
 namespace Stripboek_Project.Pages.Auth;
 
-public class SerieRepository
+public class SerieRepository: Repository
 {
-    private IDbConnection Connect()
-    {
-        return new MySqlConnection(
-            "Server=127.0.0.1;Port=3306;" +
-            "Database=comics;" +
-            "Uid=root;Pwd=;"
-        );
-    }
-    
-    public void AddSerie(string title, string year, string description, int completeAmount)
+    public int AddSerie(string title, string year, string description, int completeAmount)
     {
         using var connection = Connect();
-        var users = connection
-            .Query("INSERT INTO series (title, year, description, complete_amount) VALUES (@title,@year, @description, @complete_amount)",
-                new
-                {
-                    title = title,
-                    year = year,
-                    description = description,
-                    complete_amount = completeAmount
-                });
-        return;
+        return connection.Query<int>("INSERT INTO Series (title, year, description, complete_amount) VALUES (@title,@year, @description, @complete_amount); SELECT LAST_INSERT_ID();",new
+        {
+            title,
+            year,
+            description,
+            complete_amount = completeAmount
+        }).Single(); // return the newly inserted ID
     }
 
 
@@ -35,7 +21,7 @@ public class SerieRepository
     {
         using var connection = Connect();
         var series = connection
-            .Query<Series>("SELECT * FROM series");
+            .Query<Series>("SELECT * FROM Series");
         return series.ToList();
     }
 
@@ -43,7 +29,7 @@ public class SerieRepository
     {
         using var connection = Connect();
         var series = connection
-            .Query("DELETE FROM series WHERE id = @id", new
+            .Query("DELETE FROM Series WHERE id = @id", new
             {
                 id = id
             });
@@ -53,7 +39,7 @@ public class SerieRepository
     {
         using var connection = Connect();
         var series = connection
-            .Query<Series>("SELECT * FROM series WHERE id = @id", new
+            .Query<Series>("SELECT * FROM Series WHERE id = @id", new
             {
                 id = id
             });
@@ -64,7 +50,7 @@ public class SerieRepository
     {
         using var connection = Connect();
         var series = connection
-            .Query<Series>("UPDATE series SET title=@title, year=@year, description=@description, complete_amount=@completeAmount  WHERE id = @id", new
+            .Query<Series>("UPDATE Series SET title=@title, year=@year, description=@description, complete_amount=@completeAmount  WHERE id = @id", new
             {
                 id = id,
                 title = title,

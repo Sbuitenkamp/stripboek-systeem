@@ -1,26 +1,14 @@
-using System.Data;
-using System.Net;
 using Dapper;
-using MySql.Data.MySqlClient;
 
 namespace Stripboek_Project.Pages.Auth;
 
-public class SearchRepository
+public class SearchRepository: Repository
 {
-    private IDbConnection Connect()
-    {
-        return new MySqlConnection(
-            "Server=127.0.0.1;Port=3306;" +
-            "Database=comics;" +
-            "Uid=root;Pwd=;"
-        );
-    }
-
     public List<Comic> GetComic(string name)
     {
         using var connection = Connect();
         var comic = connection
-            .Query<Comic>("SELECT * FROM comic WHERE title LIKE @name", 
+            .Query<Comic>("SELECT * FROM Comic WHERE title LIKE @name", 
         new
             {
                 name = "%" + @name + "%"
@@ -33,9 +21,9 @@ public class SearchRepository
         using var connection = Connect();
         var comic = connection
             .Query<Series, Comic, Author, Theme, Series>(
-                "SELECT * FROM series INNER JOIN Comic ON Series.id = Comic.series_id INNER JOIN Has_a ON Series.id = Has_a.series_id " +
-                "INNER JOIN Author ON Has_a.author_id = Author.id INNER JOIN Is_themed_after ON Series.id = Is_themed_after.series_id " +
-                "INNER JOIN Theme ON Is_themed_after.theme_code = Theme.code",
+                "SELECT * FROM Series INNER JOIN Comic ON Series.id = Comic.Series_id INNER JOIN has_a ON Series.id = has_a.Series_id " +
+                "INNER JOIN Author ON has_a.Author_id = Author.id INNER JOIN is_Themed_after ON Series.id = is_Themed_after.Series_id " +
+                "INNER JOIN Theme ON is_Themed_after.Theme_code = Theme.code",
                 (series, comic, author, theme) =>
                 {
                     series.comics = comic;

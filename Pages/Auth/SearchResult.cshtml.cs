@@ -41,11 +41,11 @@ public class SearchResult : PageModel
         {
             if (combinedString == "")
             {
-                combinedString += a.name;
+                combinedString += a.Name;
             }
             else
             {
-                combinedString += ", " + a.name;
+                combinedString += ", " + a.Name;
             }
         }
         return combinedString;

@@ -1,25 +1,14 @@
-﻿using System.Data;
-using Dapper;
-using MySql.Data.MySqlClient;
+﻿using Dapper;
 
 namespace Stripboek_Project.Pages.Auth;
 
-public class RegisterRepository
+public class RegisterRepository: Repository
 {
-    private IDbConnection Connect()
-    {
-        return new MySqlConnection(
-            "Server=127.0.0.1;Port=3306;" +
-            "Database=comics;" +
-            "Uid=root;Pwd=;"
-        );
-    }
-    
     public List<Comic> Get()
     {
         using var connection = Connect();
         var collections = connection
-            .Query<Comic, Series, Comic>("SELECT * FROM comic INNER JOIN series ON comic.series_id = series.id",
+            .Query<Comic, Series, Comic>("SELECT * FROM Comic INNER JOIN series ON Comic.series_id = series.id",
                 (comic, series) =>
                 {
                     comic.series = new List<Series>();
@@ -33,7 +22,7 @@ public class RegisterRepository
     {
         using var connection = Connect();
         var comic = connection
-            .Query<Comic>("INSERT INTO comic (isbn, series_id, title, image, description, digital) VALUES (@isbn, @series_id, @title, @image, @description, @digital)",
+            .Query<Comic>("INSERT INTO Comic (isbn, series_id, title, image, description, digital) VALUES (@isbn, @series_id, @title, @image, @description, @digital)",
                 new
                 {
                     isbn = isbn,
@@ -49,7 +38,7 @@ public class RegisterRepository
     {
         using var connection = Connect();
         var Series = connection
-            .Query<Series>("SELECT * FROM series ");
+            .Query<Series>("SELECT * FROM Series ");
         return Series.ToList();
     }
 
@@ -57,26 +46,28 @@ public class RegisterRepository
     {
         using var connection = Connect();
         var comic = connection
-            .Query<Comic>("SELECT * FROM comic");
+            .Query<Comic>("SELECT * FROM Comic");
         return comic.ToList();
     }
 
-    public void DeleteComic(int isbn)
+    public string DeleteComic(int isbn)
     {
         using var connection = Connect();
+        var imgPath = connection.Query<Comic>("SELECT image FROM Comic WHERE isbn = @isbn",new { isbn = isbn }).First().image; // get the image to return to the handler
         var comic = connection
-            .Query<Comic>("DELETE FROM comic WHERE isbn = @isbn",
+            .Query<Comic>("DELETE FROM Comic WHERE isbn = @isbn",
                 new
                 {
                    isbn = isbn 
                 });
+        return imgPath;
     }
     
     public void EditComic(int isbn, int series_id, string title, string image, bool digital, string description)
     {
         using var connection = Connect();
         var comic = connection
-            .Query<Comic>("UPDATE comic SET isbn=@isbn, series_id=@series_id, title=@title, image=@image, digital=@digital, description=@description WHERE isbn = @isbn",
+            .Query<Comic>("UPDATE Comic SET isbn=@isbn, series_id=@series_id, title=@title, image=@image, digital=@digital, description=@description WHERE isbn = @isbn",
                 new
                 {
                     isbn = isbn,
@@ -91,7 +82,7 @@ public class RegisterRepository
     {
         using var connection = Connect();
         var comic = connection
-            .Query<Comic>("SELECT * FROM comic WHERE isbn = @isbn", new {isbn = isbn});
+            .Query<Comic>("SELECT * FROM Comic WHERE isbn = @isbn", new {isbn = isbn});
         return comic.ToList();
     }
 
