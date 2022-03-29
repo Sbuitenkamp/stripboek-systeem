@@ -28,24 +28,6 @@ public class Series
     public List<Theme> themes { get; set; }
 }
 
-public class Author
-{
-    public int id { get; set; }
-    public string name { get; set; }
-    public string type { get; set; }
-    
-    public List<Series> series { get; set; }
-}
-
-public class Theme
-{
-    public string code { get; set; }
-    public string name { get; set; }
-    public bool nsfw { get; set; }
-    
-    public List<Series> series { get; set; }
-}
-
 public class Collection 
 {
     public int isbn { get; set; }

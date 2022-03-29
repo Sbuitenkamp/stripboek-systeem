@@ -13,10 +13,31 @@
         <div class="row">
             <div class="col-md-6">
                 <form method="POST" asp-page-handler="SerieAanmaken">
-                    <input type="text" name="serietitle" class="form-control" placeholder="Naam">
-                    <input type="date" name="seriedate" class="form-control">
-                    <textarea class="form-control" name="seriebeschrijving" placeholder="Beschrijving..." id="floatingTextarea2" style="height: 100px"></textarea>
-                    <input text="number" name="serienummer" class="form-control" placeholder="Aantal in de serie"/>
+                    <input type="text" name="serieTitle" class="form-control" placeholder="Naam">
+                    <label for="writers">Schrijver:</label>
+                    <select name="author" id="writers">
+                        @foreach (Author author in Model.Authors.Where(x => x.type.ToLower() == "writer")) {
+                            <option value="@author.id">@author.Name</option>
+                        }
+                    </select>
+                    <br>
+                    <label for="illustrators">Tekenaar:</label>
+                    <select name="author" id="illustrators">
+                        @foreach (Author author in Model.Authors.Where(x => x.type.ToLower() == "illustrator")) {
+                            <option value="@author.id">@author.Name</option>
+                        }
+                    </select>
+                    <input type="date" name="serieDate" class="form-control">
+                    <textarea class="form-control" name="serieDescription" placeholder="Beschrijving..." id="floatingTextarea2" style="height: 100px"></textarea>
+                    <input text="number" name="serieAmount" class="form-control" placeholder="Aantal in de serie"/>
+                    @foreach (Theme theme in Model.Themes) {
+                        <input name="themeCode" type="checkbox" value="@theme.code">@theme.name @(theme.nsfw ? "18+" : null)
+                    }
+                    <select name="languageCode">
+                        @foreach (Language language in Model.Languages) {
+                            <option value="@language.code">@language.name</option>
+                        }
+                    </select>
                     <button type="submit" class="btn btn-primary">Aanmaken</button>
                 </form>
             </div>
@@ -29,7 +50,7 @@
                         <th>Aantal in serie</th>
                     </tr>
                     
-                    @foreach (var s in Model.series)
+                    @foreach (var s in Model.Series)
                     {
                         <tr>
                             <td>@s.title</td>

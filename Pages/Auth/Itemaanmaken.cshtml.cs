@@ -12,12 +12,12 @@ public class Itemaanmaken : PageModel
 
     public string Msg { get; set; } = string.Empty;
 
-    public List<Stripboek_Project.Pages.Author> Authors { get; set; } = new List<Stripboek_Project.Pages.Author>();
+    public List<Author> Authors { get; set; } = new List<Author>();
 
     public IActionResult OnGet()
     {
         var author = new AuthorRepository();
-        Authors = author.Get();
+        Authors = author.GetAllAuthors();
 
         var t = new Auth();
         return t.Check(HttpContext.Session.GetString("authed"));
@@ -30,7 +30,7 @@ public class Itemaanmaken : PageModel
 
         var author = new AuthorRepository();
         author.AddAuthor(AuthorName, Type);
-        Authors = author.Get();
+        Authors = author.GetAllAuthors();
 
         Msg = "Success";
 
