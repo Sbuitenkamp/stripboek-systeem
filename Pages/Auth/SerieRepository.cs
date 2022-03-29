@@ -4,19 +4,16 @@ namespace Stripboek_Project.Pages.Auth;
 
 public class SerieRepository: Repository
 {
-    public void AddSerie(string title, string year, string description, int completeAmount)
+    public int AddSerie(string title, string year, string description, int completeAmount)
     {
         using var connection = Connect();
-        var users = connection
-            .Query("INSERT INTO Series (title, year, description, complete_amount) VALUES (@title,@year, @description, @complete_amount)",
-                new
-                {
-                    title = title,
-                    year = year,
-                    description = description,
-                    complete_amount = completeAmount
-                });
-        return;
+        return connection.Query<int>("INSERT INTO Series (title, year, description, complete_amount) VALUES (@title,@year, @description, @complete_amount); SELECT LAST_INSERT_ID();",new
+        {
+            title,
+            year,
+            description,
+            complete_amount = completeAmount
+        }).Single(); // return the newly inserted ID
     }
 
 

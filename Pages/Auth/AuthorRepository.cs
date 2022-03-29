@@ -1,14 +1,13 @@
 ﻿using Dapper;
 
-namespace Stripboek_Project.Pages
+namespace Stripboek_Project.Pages.Auth
 {
     public class AuthorRepository: Repository
     {
-        public List<Author> Get()
+        public List<Author> GetAllAuthors()
         {
             using var connection = Connect();
-            var authors = connection
-                .Query<Author>("SELECT * FROM Author");
+            var authors = connection.Query<Author>("SELECT * FROM Author");
             return authors.ToList();
         }
 
@@ -43,9 +42,18 @@ namespace Stripboek_Project.Pages
 
         public void DeleteAuthor(int id)
         {
+            Connect().Query<Author>("DELETE FROM Author WHERE id = @id", new {id = id});
+        }
+
+        public void AssignAuthor(List<HasA> data)
+        {
             using var connection = Connect();
-            var authors = connection
-                .Query<Author>("DELETE FROM Author WHERE id = @id", new {id = id});
+            foreach (HasA authorAssign in data) connection.Query("INSERT INTO has_a (series_id, author_id) VALUES (@series_id, @author_id)", new { authorAssign.series_id, authorAssign.author_id });
+        }
+
+        public void UnassignAuthor(int seriesId)
+        {
+            Connect().Query("DELETE FROM has_a WHERE series_id = @seriesId", new { seriesId });
         }
     }
 }
