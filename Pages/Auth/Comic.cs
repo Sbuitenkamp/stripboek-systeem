@@ -22,7 +22,6 @@ public class Series
     public int completeAmount { get; set; }
     
     public Comic comics { get; set; }
-    
     public List<Author> authors { get; set; }
     
     public List<Theme> themes { get; set; }

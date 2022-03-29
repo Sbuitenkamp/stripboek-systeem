@@ -29,26 +29,31 @@ public class SearchRepository
     }
     public List<Series> GetSerie(string name)
     {
+        Console.Write(name);
         using var connection = Connect();
         var comic = connection
             .Query<Series, Comic, Author, Theme, Series>(
-                "SELECT * FROM series INNER JOIN comic ON series.id = comic.series_id INNER JOIN has_a ON series.id = has_a.series_id " +
-                "INNER JOIN author ON has_a.author_id = author.id INNER JOIN is_themed_after ON series.id = is_themed_after.series_id " +
-                "INNER JOIN theme ON is_themed_after.theme_code = theme.code WHERE series.title LIKE @name OR comic.title LIKE @name OR author.name LIKE @name",
+                "SELECT * FROM series INNER JOIN Comic ON Series.id = Comic.series_id INNER JOIN Has_a ON Series.id = Has_a.series_id " +
+                "INNER JOIN Author ON Has_a.author_id = Author.id INNER JOIN Is_themed_after ON Series.id = Is_themed_after.series_id " +
+                "INNER JOIN Theme ON Is_themed_after.theme_code = Theme.code",
                 (series, comic, author, theme) =>
                 {
                     series.comics = comic;
+                    //series.author = author;
                     series.authors = new List<Author>();
                     series.authors.Add(author);
+                    //series.theme = theme;
                     series.themes = new List<Theme>();
                     series.themes.Add(theme);
                     return series;
-                }, splitOn: "isbn,id,code",
-            param :new
-                {
-                    name = "%" + @name + "%"
-                });
-        var result = comic.GroupBy(p => p.comics.isbn).Select(g =>
+                }, splitOn: "isbn,id,code");
+
+        if (name == null)
+        {
+            name = "";
+        }
+        var result = comic.Where(c => c.authors.First().name.Contains(name, StringComparison.OrdinalIgnoreCase) || c.comics.title.Contains(name, StringComparison.OrdinalIgnoreCase) || c.title.Contains(name, StringComparison.OrdinalIgnoreCase));
+        result = result.GroupBy(p => p.comics.isbn).Select(g =>
         {
             var groupedComic = g.First();
             var lstAuthor = g.Select(p => p.authors.Single()).ToList();
