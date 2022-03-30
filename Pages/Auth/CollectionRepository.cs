@@ -8,11 +8,11 @@ public class CollectionRepository: Repository
     {
         using var connection = Connect();
         var collections = connection
-            .Query<Collection, Comic, User, Series, Collection>("SELECT * FROM collectionComic "+
-            "INNER JOIN Comic ON collectionComic.isbn = Comic.isbn "+
-            "INNER JOIN user ON collectionComic.user_id = user.id "+
-            "INNER JOIN series ON Comic.series_id = series.id "+
-            "WHERE collectionComic.user_id = @id",
+            .Query<Collection, Comic, User, Series, Collection>("SELECT * FROM CollectionComic "+
+            "INNER JOIN Comic ON CollectionComic.isbn = Comic.isbn "+
+            "INNER JOIN User ON CollectionComic.user_id = User.id "+
+            "INNER JOIN Series ON Comic.series_id = Series.id "+
+            "WHERE CollectionComic.user_id = @id",
                 (collection, comic, user, series) =>
                 {
                     collection.comics = new List<Comic>();

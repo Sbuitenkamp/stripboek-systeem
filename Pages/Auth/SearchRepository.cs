@@ -40,7 +40,7 @@ public class SearchRepository: Repository
         {
             name = "";
         }
-        var result = comic.Where(c => c.authors.First().name.Contains(name, StringComparison.OrdinalIgnoreCase) || c.comics.title.Contains(name, StringComparison.OrdinalIgnoreCase) || c.title.Contains(name, StringComparison.OrdinalIgnoreCase));
+        var result = comic.Where(c => c.authors.First().Name.Contains(name, StringComparison.OrdinalIgnoreCase) || c.comics.title.Contains(name, StringComparison.OrdinalIgnoreCase) || c.title.Contains(name, StringComparison.OrdinalIgnoreCase));
         result = result.GroupBy(p => p.comics.isbn).Select(g =>
         {
             var groupedComic = g.First();
