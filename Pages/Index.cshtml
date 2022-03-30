@@ -4,75 +4,90 @@
     ViewData["Title"] = "Login";
     Layout = "_LayoutLogin";
 }
-@Html.AntiForgeryToken()
-<div class="row mt-3">
-    <div style="display: none;" class="aler alert-danger" id="errormessagelogin"></div>
-    <div class="col-md-6">
-        <h1>Login</h1>
-        <form id="logform">
-            <input type="text" id="logusername" class="form-control" placeholder="Username...">
-            <input type="password" id="logpass" class="form-control mt-2" placeholder="password...">
-            <button type="button" id="logbutton" class="btn btn-primary mt-2">Login</button>
-        </form>
-    </div>
-    <div class="col-md-6">
-        <h1>Registreren</h1>
-        <div class="text-danger"></div>
-        <form id="regform">
-            <input type="text" id="regusername" class="form-control" placeholder="username...">
-            <input type="password" id="regpass" class="form-control mt-2" placeholder="password...">
-            <input type="password" id="regpassher" class="form-control mt-2" placeholder="password herhalen...">
-            <button type="button" id="regbutton" class="btn btn-primary mt-2">Registreren</button>
-        </form>
-    </div>
-</div>
 
-<script>
-$(document).ready(function(){
-    $('#regbutton').click(function() {
-      $.ajax({
-        type: 'POST',
-        url: '/Index?handler=Register',
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("XSRF-TOKEN",
-                $('input:hidden[name="__RequestVerificationToken"]').val());
-        },
-        data: {
-            username: $("#regusername").val(),
-            password: $("#regpass").val(),
-            passwordher: $("#regpassher").val()
-        },
-        success: function (res) {
-            console.log(res);
-            $('#regform')[0].reset();
-        },
-      })
-    })
-    
-    $('#logbutton').click(function() {
-      $.ajax({
-        type: 'POST',
-        url: '/Index?handler=Login',
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("XSRF-TOKEN",
-                $('input:hidden[name="__RequestVerificationToken"]').val());
-        },
-        data: {
-            username: $("#logusername").val(),
-            password: $("#logpass").val()
-        },
-        success: function (res) {
-            console.log(res);
-            if (res.valid == false){
-                
-                $('#errormessagelogin').text(res.message);
-                $('#errormessagelogin').fadeIn('fast');
-                setInterval(function () {$('#errormessagelogin').fadeOut('fast');}, 2000);
-            }else{
-                window.location.replace(res.page);
-            }
-        },
-      })
-    })
-})
-</script>
+@Html.AntiForgeryToken()
+<body class="index-body">
+
+    <div class="row mt-3">
+        <div style="display: none;" class="aler alert-danger" id="errormessagelogin"></div>
+        <div class="col-md-6">
+            <form class="login-form" id="logform">
+                <h1 class="login-tekst">Login</h1>
+                <div class="login-form-input">
+                    <div class="login-column">
+                        <input type="text" id="logusername" class="form-control" placeholder="username...">
+                        <input type="password" id="logpass" class="form-control mt-2" placeholder="password...">
+                        <button type="button" id="logbutton" class="btn btn-primary mt-2">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="text-danger"></div>
+            <form class="register-form" id="regform">
+                <h1 class="register-tekst">Registreren</h1>
+                <div class="register-form-input">
+                    <div class="register-columns">
+                        <input type="text" id="regusername" class="form-control" placeholder="username...">
+                        <input type="password" id="regpass" class="form-control mt-2" placeholder="password...">
+                        <input type="password" id="regpassher" class="form-control mt-2" placeholder="password herhalen...">
+                        <button type="button" id="regbutton" class="btn btn-primary mt-2">Registreren</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#regbutton').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Index?handler=Register',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: {
+                        username: $("#regusername").val(),
+                        password: $("#regpass").val(),
+                        passwordher: $("#regpassher").val()
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        $('#regform')[0].reset();
+                    },
+                })
+            })
+
+            $('#logbutton').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Index?handler=Login',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: {
+                        username: $("#logusername").val(),
+                        password: $("#logpass").val()
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        if (res.valid == false) {
+
+                            $('#errormessagelogin').text(res.message);
+                            $('#errormessagelogin').fadeIn('fast');
+                            setInterval(function () { $('#errormessagelogin').fadeOut('fast'); }, 2000);
+                        } else {
+                            window.location.replace(res.page);
+                        }
+                    },
+                })
+            })
+        })
+
+    </script>
+</body>

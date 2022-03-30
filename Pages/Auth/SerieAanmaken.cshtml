@@ -6,17 +6,17 @@
 }
 
 @Html.AntiForgeryToken()
-<h1>Serie aanmaken</h1>
 
 <div class="card">
-    <div class="card-body">
+    <div class="serie-aanmaken-card-body">
         <div class="row">
             <div class="col-md-6">
-                <form method="POST" asp-page-handler="SerieAanmaken">
+                <form class="serie-aanmaken-form" method="POST" asp-page-handler="SerieAanmaken">
+                    <h1 class="serie-aanmaken-text">Serie aanmaken</h1>
                     <input type="text" name="serietitle" class="form-control" placeholder="Naam">
                     <input type="date" name="seriedate" class="form-control">
                     <textarea class="form-control" name="seriebeschrijving" placeholder="Beschrijving..." id="floatingTextarea2" style="height: 100px"></textarea>
-                    <input text="number" name="serienummer" class="form-control" placeholder="Aantal in de serie"/>
+                    <input text="number" name="serienummer" class="form-control" placeholder="Aantal in de serie" />
                     <button type="submit" class="btn btn-primary">Aanmaken</button>
                 </form>
             </div>
@@ -37,10 +37,10 @@
                             <td>@s.description</td>
                             <td>@s.completeAmount</td>
                             <td>
-                                <div class="d-flex">
+                                <div class="serie-aanmaken-buttons d-flex">
                                     <form method="POST" class="ml-2" asp-page-handler="DeleteSerie">
                                         <input type="hidden" name="serieIdDelete" value="@s.id">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" class="button-verwijder btn btn-danger">Verwijder</button>
                                     </form>
                                     <form>
                                         <button type="button" data-id="@s.id" class="btn btn-primary editserie">Edit</button>

@@ -11,7 +11,7 @@ public abstract class Repository
         return new MySqlConnection(
             "Server=127.0.0.1;Port=3306;" +
             "Database=Comics;" +
-            "Uid=Sbuitenkamp;Pwd=pass123;"
+            "Uid=root;Pwd=;"
         );
     }
 }
