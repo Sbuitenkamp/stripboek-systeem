@@ -1,56 +1,60 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using Stripboek_Project.Pages.Models;
+using Stripboek_Project.Pages.Repositories;
 
 namespace Stripboek_Project.Pages.Auth;
 
 public class RegisterToevoegen : PageModel
 {
-    public List<Series> series { get; set; }
-    public List<Comic> comics { get; set; }
+    public List<Series> Series { get; set; }
+    public List<Comic> Comics { get; set; }
+
+    private RegisterRepository RegisterRepo = new RegisterRepository();
 
     public IActionResult OnGet()
     {
-        var x = new RegisterRepository();
-        series = x.GetSeries();
-        comics = x.GetAllComic();
+        Series = RegisterRepo.GetRegisteredSeries();
+        Comics = RegisterRepo.GetRegisteredComics();
         return Page();
     }
 
     public IActionResult OnPostAddComic(int isbn, int series_id, string title, IFormFile file, bool digital, string description)
     {
-        var x = new RegisterRepository();
-        var imagePath = "/img/register/" + series_id;
-        var extension = file.FileName.Split('.').Last();
-        Directory.CreateDirectory(imagePath);
-        imagePath += "/" + isbn + "." + extension;
-        using (var fileStream = System.IO.File.Create("./wwwroot/" + imagePath))
+        // image path for comics in the register are /img/register/{seriesId}/{isbn}.extension
+        string imagePath = "/img/register/" + series_id + "/";
+        Console.WriteLine(imagePath);
+        
+        Directory.CreateDirectory("./wwwroot/" + imagePath); // create dir if it doesn't exist yet for that series
+        imagePath += isbn + "." + file.FileName.Split('.').Last(); // add filename + retain original extenstion
+        
+        Console.WriteLine(imagePath);
+        
+        // copy the file to the server
+        using (FileStream fileStream = System.IO.File.Create("./wwwroot/" + imagePath))
         {
             file.CopyTo(fileStream);
         }
-        x.AddComic(isbn, series_id, title, imagePath, digital, description);
+        RegisterRepo.AddComic(isbn, series_id, title, imagePath, digital, description);
         return Redirect("/Auth/RegisterToevoegen");
     }
 
     public IActionResult OnPostDeleteComic(int idDelete)
     {
-        var x = new RegisterRepository();
-        var imgPath = x.DeleteComic(idDelete);
+        string imgPath = RegisterRepo.DeleteComic(idDelete);
         System.IO.File.Delete("./wwwroot/" + imgPath); // delete image to save space
         return Redirect("/Auth/RegisterToevoegen");
     }
 
     public IActionResult OnPostEditComic(int isbn, int series_id, string title, string image, bool digital, string description)
     {
-        var x = new RegisterRepository();
-        x.EditComic(isbn, series_id, title, image, digital, description);
+        RegisterRepo.EditComic(isbn, series_id, title, image, digital, description);
         return Redirect("/Auth/RegisterToevoegen");
     }
 
     public IActionResult OnGetAllComic(int isbn)
     {
-        var x = new RegisterRepository();
-        return new JsonResult(x.GetSingleComic(isbn));
+        return new JsonResult(RegisterRepo.GetSingleComic(isbn));
         
     }
 }
