@@ -1,14 +1,14 @@
 using Dapper;
+using Stripboek_Project.Pages.Auth;
+using Stripboek_Project.Pages.Models;
 
-namespace Stripboek_Project.Pages.Auth;
+namespace Stripboek_Project.Pages.Repositories;
 
 public class ThemeRepository: Repository
 {
     public List<Theme> GetAllThemes()
     {
-        using var connection = Connect();
-        var themes = connection.Query<Theme>("SELECT * FROM Theme");
-        return themes.ToList();
+        return Connect().Query<Theme>("SELECT * FROM Theme").ToList();
     }
 
     public void AssignTheme(List<ThemedAfter> data)

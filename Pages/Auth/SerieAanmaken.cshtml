@@ -1,4 +1,5 @@
 @page
+@using Stripboek_Project.Pages.Models
 @model Stripboek_Project.Pages.Auth.SerieAanmaken
 
 @{
@@ -17,14 +18,14 @@
                     <label for="writers">Schrijver:</label>
                     <select name="author" id="writers">
                         @foreach (Author author in Model.Authors.Where(x => x.type.ToLower() == "writer")) {
-                            <option value="@author.id">@author.Name</option>
+                            <option value="@author.id">@author.name</option>
                         }
                     </select>
                     <br>
                     <label for="illustrators">Tekenaar:</label>
                     <select name="author" id="illustrators">
                         @foreach (Author author in Model.Authors.Where(x => x.type.ToLower() == "illustrator")) {
-                            <option value="@author.id">@author.Name</option>
+                            <option value="@author.id">@author.name</option>
                         }
                     </select>
                     <input type="date" name="serieDate" class="form-control">
