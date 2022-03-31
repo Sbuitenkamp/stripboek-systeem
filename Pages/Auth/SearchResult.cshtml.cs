@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stripboek_Project.Pages.Models;
+using Stripboek_Project.Pages.Repositories;
 
 namespace Stripboek_Project.Pages.Auth;
 
@@ -9,45 +11,27 @@ public class SearchResult : PageModel
     public string Search { get; set; }
     public List<Series> Results { get; set; }
     
+    private SearchRepository SearchRepo = new SearchRepository();
+
     public IActionResult OnGet([FromQuery] string Search)
     {
-        var res = new SearchRepository();
-        Results = res.GetSerie(Search);
-        var t = new Auth();
-        return t.Check(HttpContext.Session.GetString("authed"));
+        Results = SearchRepo.GetSeries(Search);
+        Models.Auth auth = new Models.Auth();
+        return auth.Check(HttpContext.Session.GetString("authed"));
     }
 
-    public string GetThemeFromList(List<Theme> lst)
+    // concat functions
+    public string GetThemeFromList(List<Theme> list)
     {
         string combinedString = "";
-        foreach (var t in lst)
-        {
-            if (combinedString == "")
-            {
-                combinedString += t.name;
-            }
-            else
-            {
-                combinedString += ", " + t.name;
-            }
-        }
+        foreach (Theme t in list) combinedString += combinedString == "" ? t.name : ", " + t.name;
         return combinedString;
     }
     
     public string GetAuthorFromList(List<Author> lst)
     {
         string combinedString = "";
-        foreach (var a in lst)
-        {
-            if (combinedString == "")
-            {
-                combinedString += a.name;
-            }
-            else
-            {
-                combinedString += ", " + a.name;
-            }
-        }
+        foreach (Author a in lst) combinedString += combinedString == "" ? a.name : ", " + a.name;
         return combinedString;
     }
 

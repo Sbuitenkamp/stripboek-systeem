@@ -16,7 +16,7 @@
                     <input name="isbn" type="number" class="form-control" placeholder="ISBN">
                     <select name="series_id" class="form-select" aria-label="Default select example">
                         <option selected>Open this select menu</option>
-                        @foreach (var s in Model.series)
+                        @foreach (var s in Model.Series)
                         {
                             <option value="@s.id">@s.title</option>
                         }
@@ -43,13 +43,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var c in Model.comics)
+                    @foreach (var c in Model.Comics)
                     {
                         <tr>
                             <td>@c.isbn</td>
                             <td>@c.series_id</td>
                             <td>@c.title</td>
-                            <td><img src="@c.image" alt="@c.image"></td>
+                            <td><img width="100%" src="@c.image" alt="@c.image"></td>
                             <td>@c.digital</td>
                             <td>@c.description</td>
                             <td class="comic-toevoegen-buttons">
@@ -72,7 +72,7 @@
         <input id="isbnedit" type="number" class="form-control" placeholder="ISBN">
         <select id="series_idedit" class="form-select" aria-label="Default select example">
             <option selected>Open this select menu</option>
-            @foreach (var s in Model.series)
+            @foreach (var s in Model.Series)
             {
                 <option value="@s.id">@s.title</option>
             }

@@ -7,7 +7,7 @@ public class Gebruikersbeheren : PageModel
 {
     public IActionResult OnGet()
     {
-        var t = new Auth();
-        return t.Check(HttpContext.Session.GetString("authed"));
+        Models.Auth auth = new Models.Auth();
+        return auth.Check(HttpContext.Session.GetString("authed"));
     }
 }
