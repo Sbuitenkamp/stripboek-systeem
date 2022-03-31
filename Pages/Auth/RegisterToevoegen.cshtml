@@ -6,11 +6,13 @@
     
 }
 
-<div class="card">
-    <div class="card-body">
+
+<div class="comic-toevoegen-card card">
+    <div class="comic-toevoegen-card-body">
         <div class="row">
-            <div class="col-md-6">
-                <form method="post" asp-page-handler="AddComic" enctype="multipart/form-data">
+            <div class="comic-toevoegen-columns col-md-6">
+                <form class="comic-toevoegen-form" method="post" asp-page-handler="AddComic" enctype="multipart/form-data">
+                    <h1 class="comic-toevoegen-text">Comic toevoegen</h1>
                     <input name="isbn" type="number" class="form-control" placeholder="ISBN">
                     <select name="series_id" class="form-select" aria-label="Default select example">
                         <option selected>Open this select menu</option>
@@ -21,13 +23,14 @@
                     </select>
                     <input name="title" type="text" class="form-control" placeholder="Titel">
                     <input name="file" type="file" class="form-control" placeholder="Foto">
-                    <input name="digital" type="checkbox" class="form-control" placeholder="Digitaal">
+                    @*<input name="digital" type="checkbox" class="form-control" placeholder="Digitaal">*@
                     <textarea name="description" class="form-control" placeholder="Beschrijving" id="floatingTextarea2" style="height: 100px"></textarea>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <div class="aanmaken-button"><button type="submit" class="btn btn-primary">Aanmaken</button></div>
                 </form>
             </div>
-            <div class="col-md-6">
-                <table class="table">
+
+            <div class="comic-toevoegen-card-body2 col-md-6">
+                <table class="comic-toevoegen-table table">
                     <thead>
                     <tr>
                         <th scope="col">Isbn</th>
@@ -49,10 +52,10 @@
                             <td><img width="100%" src="@c.image" alt="@c.image"></td>
                             <td>@c.digital</td>
                             <td>@c.description</td>
-                            <td>
+                            <td class="comic-toevoegen-buttons">
                                 <form method="post" asp-page-handler="DeleteComic">
                                     <input type="hidden" value="@c.isbn" name="idDelete"/>
-                                    <button type="submit" class="btn btn-danger">Verwijder</button>
+                                    <button type="submit" class="comic-toevoegen-verwijder btn btn-danger">Verwijder</button>
                                 </form>
                                 <form>
                                     <button type="button" data-id="@c.isbn" class="btn btn-primary editComic">Edit</button>

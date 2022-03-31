@@ -7,13 +7,12 @@
 }
 
 @Html.AntiForgeryToken()
-<h1>Serie aanmaken</h1>
 
 <div class="card">
-    <div class="card-body">
+    <div class="serie-aanmaken-card-body">
         <div class="row">
             <div class="col-md-6">
-                <form method="POST" asp-page-handler="SerieAanmaken">
+                <form class="serie-aanmaken-form" method="POST" asp-page-handler="SerieAanmaken">
                     <input type="text" name="serieTitle" class="form-control" placeholder="Naam">
                     <label for="writers">Schrijver:</label>
                     <select name="author" id="writers">
@@ -59,10 +58,10 @@
                             <td>@s.description</td>
                             <td>@s.completeAmount</td>
                             <td>
-                                <div class="d-flex">
+                                <div class="serie-aanmaken-buttons d-flex">
                                     <form method="POST" class="ml-2" asp-page-handler="DeleteSerie">
                                         <input type="hidden" name="serieIdDelete" value="@s.id">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" class="button-verwijder btn btn-danger">Verwijder</button>
                                     </form>
                                     <form>
                                         <button type="button" data-id="@s.id" class="btn btn-primary editserie">Edit</button>
